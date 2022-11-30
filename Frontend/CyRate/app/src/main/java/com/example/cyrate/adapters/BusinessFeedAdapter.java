@@ -1,5 +1,6 @@
 package com.example.cyrate.adapters;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -33,9 +34,15 @@ import com.example.cyrate.models.BusinessPostCardModel;
 //import com.example.cyrate.models.RecyclerViewInterface;
 import com.example.cyrate.models.ReviewListCardModel;
 
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.drafts.Draft;
+import org.java_websocket.drafts.Draft_6455;
+import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONException;
 
 import java.lang.reflect.Array;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,8 +98,11 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
     // Class necessary and is similar for having an onCreate method. Allows us to get all our views
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView busProfilePic, busPostPhoto, deleteIcon, editIcon;
+        ImageView busProfilePic, busPostPhoto, deleteIcon, editIcon, likeButton;
         TextView busName, busPostDate, busPostText;
+
+        WebSocketClient webSocket;
+        String SERVER_PATH = "wss://ws.postman-echo.com/raw/";
 
         public MyViewHolder(@NonNull View itemView, Context ctx, Bundle extras, ArrayList<BusinessPostCardModel> list) {
             super(itemView);
@@ -105,7 +115,7 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
 
             deleteIcon = itemView.findViewById(R.id.busPost_deleteIcon);
             editIcon = itemView.findViewById(R.id.busPost_editIcon);
-
+            likeButton = itemView.findViewById(R.id.busPost_thumbsUp);
 
             // Remove the delete icon if the current User is not the original reviewer or not an Admin
             deleteIcon.setVisibility(View.GONE);
@@ -131,6 +141,13 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
                 editIcon.setVisibility(View.VISIBLE);
             }
 
+            try {
+                initiateSocketConnection(ctx);
+                webSocket.connect();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+
             editIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -141,6 +158,13 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
                     intent.putExtra("POST_ID", list.get(getAdapterPosition()).getPostId());
 
                     ctx.startActivity(intent);
+                }
+            });
+
+            likeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
                 }
             });
 
@@ -201,6 +225,42 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
             });
 
         }
+        private void initiateSocketConnection(Context ctx) throws URISyntaxException {
+            Draft[] drafts = {
+                    new Draft_6455()
+            };
+
+
+            Log.d("Socket:", "Trying socket");
+            webSocket = new WebSocketClient(new URI(SERVER_PATH)) {
+                @Override
+                public void onOpen(ServerHandshake handshakedata) {
+                    Log.d("OPEN", "run() returned: " + "is connecting");
+                   ((Activity) ctx).runOnUiThread(new Runnable() {
+                       @Override
+                       public void run() {
+                           Toast.makeText(ctx, "Socket Connection Successful", Toast.LENGTH_SHORT).show();
+                       }
+                   });
+                }
+
+                @Override
+                public void onMessage(String message) {
+
+                }
+
+                @Override
+                public void onClose(int code, String reason, boolean remote) {
+
+                }
+
+                @Override
+                public void onError(Exception ex) {
+
+                }
+            };
+        }
+
     }
 
 }

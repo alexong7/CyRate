@@ -81,6 +81,8 @@ public class IndividualReviewActivity extends AppCompatActivity {
         cs.setHorizontalBias(R.id.commentIcon, (float) 0.6);
         cs.applyTo(cl);
 
+        editReviewIcon.setVisibility(View.INVISIBLE);
+
         int originalReviewerId = extras.getInt("REVIEWER_ID");
         if (MainActivity.globalUser.getUserId() == originalReviewerId ||
                 MainActivity.globalUser.getUserType() == UserType.ADMIN) {
@@ -90,6 +92,8 @@ public class IndividualReviewActivity extends AppCompatActivity {
             cs.applyTo(cl);
 
             deleteIcon.setVisibility(View.VISIBLE);
+            editReviewIcon.setVisibility(View.VISIBLE);
+
         }
 
         editReviewIcon.setOnClickListener(new View.OnClickListener() {
