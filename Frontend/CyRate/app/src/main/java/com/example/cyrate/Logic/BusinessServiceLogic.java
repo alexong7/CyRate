@@ -393,7 +393,8 @@ public class BusinessServiceLogic {
                             post.getString("postTxt"),
                             post.getString("date"),
                             post.getString("photoUrl"),
-                            bus
+                            bus,
+                            1000
                     );
                     businessPostList.add(busPostCardModel);
 

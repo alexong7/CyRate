@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -39,6 +41,7 @@ import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Array;
 import java.net.URI;
@@ -57,7 +60,6 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
     Bundle extras;
 
     /**
-     *
      * @param ctx
      * @param businessPostList
      * @param extras
@@ -66,7 +68,7 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
             Context ctx,
             ArrayList<BusinessPostCardModel> businessPostList,
             Bundle extras
-    ){
+    ) {
         this.ctx = ctx;
         this.businessPostList = businessPostList;
         this.extras = extras;
@@ -76,7 +78,7 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
     @Override
     public BusinessFeedAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(ctx);
-        View view = inflater.inflate(R.layout. business_post_card, parent, false);
+        View view = inflater.inflate(R.layout.business_post_card, parent, false);
         return new BusinessFeedAdapter.MyViewHolder(view, ctx, extras, businessPostList);
     }
 
@@ -88,6 +90,7 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
         holder.busName.setText(businessPostList.get(position).getBusiness().getBusName());
         holder.busPostDate.setText(businessPostList.get(position).getDate());
         holder.busPostText.setText(businessPostList.get(position).getPostTxt());
+        holder.likeCount.setText(String.valueOf(businessPostList.get(position).getLikeCount()));
     }
 
     @Override
@@ -99,7 +102,7 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         ImageView busProfilePic, busPostPhoto, deleteIcon, editIcon, likeButton;
-        TextView busName, busPostDate, busPostText;
+        TextView busName, busPostDate, busPostText, likeCount;
 
         WebSocketClient webSocket;
         String SERVER_PATH = "wss://ws.postman-echo.com/raw/";
@@ -112,6 +115,7 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
             busName = itemView.findViewById(R.id.busPost_name);
             busPostDate = itemView.findViewById(R.id.busPost_date);
             busPostText = itemView.findViewById(R.id.busPost_bodyText);
+            likeCount = itemView.findViewById(R.id.busPost_likeCount);
 
             deleteIcon = itemView.findViewById(R.id.busPost_deleteIcon);
             editIcon = itemView.findViewById(R.id.busPost_editIcon);
@@ -164,7 +168,18 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
             likeButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    final int updatedLikeCount = list.get(getAdapterPosition()).getLikeCount() + 1;
+                    likeCount.setText(String.valueOf(updatedLikeCount));
+                    JSONObject obj = new JSONObject();
+                    try {
+                        obj.put("POST_ID", list.get(getAdapterPosition()).getPostId());
+                        obj.put("LIKE_COUNT", updatedLikeCount);
+                        webSocket.send(obj.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
+                    likeButton.setColorFilter(Color.parseColor("#C20000"));
                 }
             });
 
@@ -225,6 +240,8 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
             });
 
         }
+
+
         private void initiateSocketConnection(Context ctx) throws URISyntaxException {
             Draft[] drafts = {
                     new Draft_6455()
@@ -236,17 +253,18 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
                 @Override
                 public void onOpen(ServerHandshake handshakedata) {
                     Log.d("OPEN", "run() returned: " + "is connecting");
-                   ((Activity) ctx).runOnUiThread(new Runnable() {
-                       @Override
-                       public void run() {
-                           Toast.makeText(ctx, "Socket Connection Successful", Toast.LENGTH_SHORT).show();
-                       }
-                   });
+                    ((Activity) ctx).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(ctx, "Socket Connection Successful", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
 
                 @Override
                 public void onMessage(String message) {
-
+                Log.d("Socket:" ,"Message Received " + message);
+                // Do stuff when server is setup
                 }
 
                 @Override
@@ -262,5 +280,6 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
         }
 
     }
+
 
 }

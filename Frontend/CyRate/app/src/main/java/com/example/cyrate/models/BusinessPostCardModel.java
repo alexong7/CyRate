@@ -5,6 +5,7 @@ public class BusinessPostCardModel {
     private String postTxt;
     private String date;
     private String photoUrl;
+    private int likeCount;
     private BusinessListCardModel business;
 
     /**
@@ -15,13 +16,16 @@ public class BusinessPostCardModel {
      * @param photoUrl
      * @param business
      */
-    public BusinessPostCardModel(int postId, String postTxt, String date, String photoUrl, BusinessListCardModel business) {
+    public BusinessPostCardModel(int postId, String postTxt, String date, String photoUrl, BusinessListCardModel business, int likeCount) {
         this.postId = postId;
         this.postTxt = postTxt;
         this.date = date;
         this.photoUrl = photoUrl;
         this.business = business;
+        this.likeCount = likeCount;
     }
+
+
 
     /**
      *
@@ -101,5 +105,13 @@ public class BusinessPostCardModel {
      */
     public void setBusiness(BusinessListCardModel business) {
         this.business = business;
+    }
+
+    public int getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
     }
 }
