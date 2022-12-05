@@ -105,10 +105,10 @@ public class FavoritesController {
      * @param pid
      * @return success
      */
-    @DeleteMapping(path = "/favorites/delete/{pid}")
-    String deleteFavorite(@PathVariable int pid)
+    @DeleteMapping(path = "/favorites/delete/{fid}")
+    String deleteFavorite(@PathVariable int fid)
     {
-        favRepo.deleteById(pid);
+        favRepo.deleteById(fid);
         return success;
     }
 

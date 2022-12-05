@@ -43,6 +43,7 @@ public Post(){
 
 }
 
+
 public Post(String postTxt, String date, String photo)
 {
     this.postTxt = postTxt;
