@@ -55,11 +55,6 @@ private Post post;
 public Like() {
 }
 
-public Like(int likeCount)
-{
-    this.likeCount = likeCount;
-}
-
 public int getLid()
 {
     return lid;
@@ -109,6 +104,18 @@ public void setLikeType(String likeType)
 {
     this.likeType = likeType;
 }
+
+public int getLikeCount()
+{
+    return likeCount;
+}
+
+public void setLikeCount(int likeCount)
+{
+    this.likeCount = likeCount;
+}
+
+
 
 
 }
