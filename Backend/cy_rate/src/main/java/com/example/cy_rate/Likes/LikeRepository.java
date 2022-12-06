@@ -7,6 +7,8 @@ import com.example.cy_rate.BusinessPosts.Post;
 import com.example.cy_rate.Review.Review;
 
 public interface LikeRepository extends JpaRepository<Like, Integer>{
+    Like findByReview(Review review);
+    Like findByPost(Post post);
     Like findById(int id);
     void deleteById(int id);
 
