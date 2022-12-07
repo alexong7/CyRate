@@ -1,7 +1,10 @@
 package com.example.cyrate.Logic;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
+import android.util.Base64;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
@@ -392,7 +395,7 @@ public class BusinessServiceLogic {
                             post.getInt("pid"),
                             post.getString("postTxt"),
                             post.getString("date"),
-                            post.getString("photoUrl"),
+                            Base64.decode(post.getString("blobPhoto"), Base64.DEFAULT),
                             bus
                     );
                     businessPostList.add(busPostCardModel);
@@ -418,11 +421,11 @@ public class BusinessServiceLogic {
      *
      * @param busId
      * @param postTxt
-     * @param photoUrl
+     * @param blobPhoto
      * @param r
      * @throws JSONException
      */
-    public void addPost(int busId, String postTxt, String photoUrl, businessStringResponse r) throws JSONException {
+    public void addPost(int busId, String postTxt, String blobPhoto, businessStringResponse r) throws JSONException {
         String url = Const.CREATE_POST + String.valueOf(busId);
 
         Log.d("ADD POST URL", url);
@@ -435,7 +438,7 @@ public class BusinessServiceLogic {
         HashMap<String, Object> params = new HashMap<>();
         params.put("postTxt", postTxt);
         params.put("date", dateStr);
-        params.put("photoUrl", photoUrl);
+        params.put("blobPhoto", blobPhoto);
 
         Log.d("addPost - newPost", params.toString());
 
@@ -553,5 +556,7 @@ public class BusinessServiceLogic {
         AppController.getInstance().addToRequestQueue(request);
     }
 
+
 }
+
 

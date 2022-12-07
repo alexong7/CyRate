@@ -1,0 +1,9 @@
+com.example.cyrate
+com.example.cyrate.activities
+com.example.cyrate.adapters
+com.example.cyrate.Logic
+com.example.cyrate.Logic.BusinessInterfaces
+com.example.cyrate.Logic.ReviewInterfaces
+com.example.cyrate.Logic.UserInterfaces
+com.example.cyrate.models
+com.example.cyrate.net_utils

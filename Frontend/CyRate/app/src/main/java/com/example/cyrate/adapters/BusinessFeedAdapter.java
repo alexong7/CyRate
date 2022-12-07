@@ -4,8 +4,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,12 +78,31 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
 
     @Override
     public void onBindViewHolder(@NonNull BusinessFeedAdapter.MyViewHolder holder, int position) {
+//        final String busPostPhoto = businessPostList.get(position).getPhotoUrl();
+//
+//        if(busPostPhoto.contains("http")){
+//            new ImageLoaderTask(businessPostList.get(position).getPhotoUrl(), holder.busPostPhoto).execute();
+//        }
+//        else{
+//            final Bitmap bitmap = getBitmapFromString(busPostPhoto);
+//            holder.busPostPhoto.setImageBitmap(bitmap);
+//        }
+
+        final byte[] imgBlob = businessPostList.get(position).getBlobPhoto();
+        final Bitmap bitmap = BitmapFactory.decodeByteArray(imgBlob, 0, imgBlob.length);
+        holder.busPostPhoto.setImageBitmap(bitmap);
+
         new ImageLoaderTask(businessPostList.get(position).getBusiness().getPhotoUrl(), holder.busProfilePic).execute();
-        new ImageLoaderTask(businessPostList.get(position).getPhotoUrl(), holder.busPostPhoto).execute();
 
         holder.busName.setText(businessPostList.get(position).getBusiness().getBusName());
         holder.busPostDate.setText(businessPostList.get(position).getDate());
         holder.busPostText.setText(businessPostList.get(position).getPostTxt());
+    }
+
+
+    private Bitmap getBitmapFromString(String image){
+        byte[] bytes = Base64.decode(image, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
     }
 
     @Override
@@ -137,7 +159,7 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
                     Intent intent = new Intent(ctx, EditBusinessPostActivity.class);
                     intent.putExtras(extras);
                     intent.putExtra("POST_TEXT", list.get(getAdapterPosition()).getPostTxt());
-                    intent.putExtra("POST_PHOTO", list.get(getAdapterPosition()).getPhotoUrl());
+//                    intent.putExtra("POST_PHOTO", list.get(getAdapterPosition()).getPhotoUrl());
                     intent.putExtra("POST_ID", list.get(getAdapterPosition()).getPostId());
 
                     ctx.startActivity(intent);
@@ -202,5 +224,7 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
 
         }
     }
+
+
 
 }

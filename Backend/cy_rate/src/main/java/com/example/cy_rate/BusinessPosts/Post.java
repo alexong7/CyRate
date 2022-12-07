@@ -1,17 +1,12 @@
 package com.example.cy_rate.BusinessPosts;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.example.cy_rate.Business.Business;
 
 import io.swagger.v3.oas.annotations.Hidden;
+
+import java.sql.Blob;
 
 
 @Entity
@@ -29,8 +24,10 @@ public class Post {
     @Column(name = "date")
     private String date;
 
-    @Column(name = "photoUrl")
-    private String photoUrl;
+    @Lob
+    @Column(name = "blobPhoto", columnDefinition="BLOB")
+    private byte[] blobPhoto;
+
 
     @ManyToOne
     @JoinColumn(name = "bid", referencedColumnName = "busId")
@@ -39,16 +36,13 @@ public class Post {
 public Post(){
     this.postTxt = "";
     this.date = "";
-    this.photoUrl = "";
-
+//    this.photoUrl = "";
 }
 
-
-public Post(String postTxt, String date, String photo)
+public Post(String postTxt, String date)
 {
     this.postTxt = postTxt;
     this.date = date;
-    this.photoUrl = photo;
     // this.likes = likes;
     // this.dislikes = dislikes;
 }
@@ -93,21 +87,11 @@ public void setPostTxt(String postTxt)
     this.postTxt = postTxt;
 }
 
-public String getPhotoUrl()
-{
-    return photoUrl;
-}
 
-public void setPhotoUrl(String photo)
-{
-    this.photoUrl = photo;
-}
+public byte[] getBlobPhoto() { return blobPhoto; }
 
-@Override
-public String toString()
-{
-    return postTxt + "\n" + date + "\n" + photoUrl + "\n";
-}
+public void setBlobPhoto(byte[] blobPhoto) { this.blobPhoto = blobPhoto; }
+
 }
 
 

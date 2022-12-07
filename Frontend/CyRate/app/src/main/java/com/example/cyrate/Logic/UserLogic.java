@@ -101,6 +101,12 @@ public class UserLogic {
 
     }
 
+    /**
+     * converts a JSON user object, converts to and returns a UserModel
+     * @param user
+     * @return
+     * @throws JSONException
+     */
     private UserModel convertToUserModel(JSONObject user) throws JSONException {
         UserModel newUserModel = new UserModel(user.get("email").toString(), user.get("userPass").toString());
         newUserModel.setUsername(user.get("username").toString());
@@ -114,6 +120,11 @@ public class UserLogic {
         return newUserModel;
     }
 
+    /**
+     * returns the corresponding UserType enum to go with the string used in DB
+     * @param jsonType user type string from DB
+     * @return
+     */
     private UserType convertUserType(String jsonType){
         switch (jsonType){
             case "guest":

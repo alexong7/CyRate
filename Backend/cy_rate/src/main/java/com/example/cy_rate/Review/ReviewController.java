@@ -114,7 +114,6 @@ public class ReviewController {
      * Update a specific review, only able to update reviewHeader, raateVal, and reviewTxt
      * Cannot change what user left the review or what business it is for 
      * @param rid review id
-     * @param newR new review object to update old
      * @return success/failure str
      */
     @Operation(summary = "Update reviewHeader, rateVal, and reviewTxt for a specific review")
