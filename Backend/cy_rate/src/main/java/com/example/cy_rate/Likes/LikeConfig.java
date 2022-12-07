@@ -7,7 +7,7 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 @Configuration
 public class LikeConfig {
     @Bean
-	public ServerEndpointExporter serverEndpointExporter() {
+	public ServerEndpointExporter serverEndpointExporterLikes() {
 		return new ServerEndpointExporter();
 	}
 
