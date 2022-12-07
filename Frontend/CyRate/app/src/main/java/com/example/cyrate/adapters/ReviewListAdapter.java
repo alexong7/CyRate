@@ -76,7 +76,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
         public MyViewHolder(@NonNull View itemView, ReviewRecyclerViewInterface recyclerViewInterface) {
             super(itemView);
 
-            profilePic = itemView.findViewById(R.id.profilePic);
+            profilePic = itemView.findViewById(R.id.profile_pic);
             reviewerName = itemView.findViewById(R.id.reviewerName);
             reviewText = itemView.findViewById(R.id.review_txt);
             rateVal = itemView.findViewById(R.id.rating);

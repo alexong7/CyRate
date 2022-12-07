@@ -8,7 +8,7 @@
     android:gravity="bottom"
     android:paddingLeft="20dp"
     android:paddingBottom="3dp"
-
+    android:id="@+id/nav_menu_header"
     >
 
     <ImageView

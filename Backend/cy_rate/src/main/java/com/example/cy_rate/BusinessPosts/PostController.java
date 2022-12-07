@@ -1,9 +1,9 @@
 package com.example.cy_rate.BusinessPosts;
+import java.util.Arrays;
 import java.util.List;
 
 
-
-
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,6 +65,7 @@ public class PostController {
         try{
             Business b = businessRepo.findById(bid);
             post.setBusiness(b);
+
             postRepo.save(post);
             return success;
         }
@@ -77,7 +78,7 @@ public class PostController {
 
     /**
      * Deletes Post through the bid that its given
-     * @param bid
+     * @param pid
      * @return if the deletion was succesful or a failure
      */
     @DeleteMapping(path = "/posts/delete/{pid}")
@@ -90,8 +91,8 @@ public class PostController {
     /**
      * Updates a post by its Business Id.
      *  Allows you to edit a business post
-     * @param bid
-     * @param p
+     * @param pid
+     * @param eP
      * @return
      */
     @PutMapping(path = "/posts/update/{pid}")
@@ -99,7 +100,8 @@ public class PostController {
     {
         Post p = postRepo.findById(pid);
         p.setPostTxt(eP.getPostTxt());
-        p.setPhotoUrl(eP.getPhotoUrl());
+//        p.setPhotoUrl(eP.getPhotoUrl());
+        p.setBlobPhoto(eP.getBlobPhoto());
         p.setDate(eP.getDate());
         postRepo.save(p);
         return success;

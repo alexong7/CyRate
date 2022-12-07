@@ -114,7 +114,6 @@ public class ReviewController {
      * Update a specific review, only able to update reviewHeader, raateVal, and reviewTxt
      * Cannot change what user left the review or what business it is for 
      * @param rid review id
-     * @param newR new review object to update old
      * @return success/failure str
      */
     @Operation(summary = "Update reviewHeader, rateVal, and reviewTxt for a specific review")
@@ -123,7 +122,15 @@ public class ReviewController {
     {
         Review r = reviewRepo.findById(rid);
         r.setReviewHeader(newR.getReviewHeader());
-        r.setRateVal(newR.getRateVal());
+
+        // Update Business review sum to reflect updated review
+        if(r.getRateVal() != newR.getRateVal())
+        {
+            Business temp = businessRepo.findById(r.getBusiness().getBusId());
+            temp.setReviewSum(temp.getReviewSum() - r.getRateVal());
+            temp.setReviewSum(temp.getReviewSum() + newR.getRateVal());
+            r.setRateVal(newR.getRateVal());
+        }
         r.setReviewTxt(newR.getReviewTxt());
         reviewRepo.save(r);
         return success;

@@ -58,7 +58,7 @@ public class ReviewListActivity extends AppCompatActivity implements ReviewRecyc
         noReviewTxt = findViewById(R.id.noReviewsText);
 
         // Guest users should not be able to add a review
-        if (MainActivity.globalUser.getEmail().equals("guest-user-email")) {
+        if (MainActivity.globalUser.getUserType() == UserType.GUEST) {
             addReview_btn.setVisibility(View.GONE);
         }
 
@@ -185,6 +185,8 @@ public class ReviewListActivity extends AppCompatActivity implements ReviewRecyc
         intent.putExtra("REVIEW_BODY", reviewListCardModels.get(position).getReviewText());
         intent.putExtra("REVIEWER_PROFILE_PIC", reviewListCardModels.get(position).getReviewUser().getPhotoUrl());
         intent.putExtra("REVIEWER_USERNAME", reviewListCardModels.get(position).getReviewUser().getUsername());
+
+
         intent.putExtra("REVIEW_HEADING", reviewListCardModels.get(position).getReviewHeader());
         intent.putExtra("REVIEW_ID", reviewListCardModels.get(position).getReviewId());
         intent.putExtra("REVIEWER_ID", reviewListCardModels.get(position).getReviewUser().getUserId());

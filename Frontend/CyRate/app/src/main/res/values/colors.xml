@@ -15,5 +15,8 @@
     <color name="red">#C20000</color>
     <color name="golden_yellow">#ebba34</color>
     <color name="lightGray">#d9d9d9</color>
+    <color name="gray">#bfbfbf</color>
+    <color name="green">#17990e</color>
+
 
 </resources>

@@ -17,6 +17,7 @@ import com.example.cyrate.Logic.BusinessInterfaces.getBusinessPostsByID;
 import com.example.cyrate.Logic.BusinessInterfaces.getBusinessesResponse;
 import com.example.cyrate.Logic.BusinessServiceLogic;
 import com.example.cyrate.R;
+import com.example.cyrate.UserType;
 import com.example.cyrate.adapters.BusinessFeedAdapter;
 import com.example.cyrate.adapters.BusinessListAdapter;
 import com.example.cyrate.models.BusinessListCardModel;
@@ -49,6 +50,11 @@ public class BusinessPostFeed extends AppCompatActivity {
         addPost_btn = findViewById(R.id.busFeed_addPost);
         emptyView = findViewById(R.id.empty_view_busFeed);
 
+        // Make this only visible for admins for now, since we don't have
+        // business accounts set up entirely yet.
+        if(!MainActivity.globalUser.getUserType().equals(UserType.ADMIN)){
+            addPost_btn.setVisibility(View.INVISIBLE);
+        }
 
         // Set this to non-visible initially
         emptyView.setVisibility(View.GONE);

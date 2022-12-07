@@ -18,11 +18,11 @@ import android.widget.Toast;
 
 import com.example.cyrate.EditReviewActivity;
 import com.example.cyrate.ImageLoaderTask;
-import com.example.cyrate.Logic.BusinessInterfaces.businessStringResponse;
 import com.example.cyrate.Logic.ReviewInterfaces.reviewStringResponse;
 import com.example.cyrate.Logic.ReviewServiceLogic;
 import com.example.cyrate.R;
 import com.example.cyrate.UserType;
+import com.example.cyrate.net_utils.Const;
 
 import org.json.JSONException;
 
@@ -44,7 +44,7 @@ public class IndividualReviewActivity extends AppCompatActivity {
 
         back_btn = (ImageView) findViewById(R.id.back_button_image);
         editReviewIcon = findViewById(R.id.editReview_icon);
-        reviewerProfilePic = findViewById(R.id.profilePic);
+        reviewerProfilePic = findViewById(R.id.profile_pic);
         deleteIcon = findViewById(R.id.deleteReviewIcon);
         thumbsUpIcon = findViewById(R.id.thumbsUpIcon);
         commentIcon = findViewById(R.id.commentIcon);
@@ -67,10 +67,10 @@ public class IndividualReviewActivity extends AppCompatActivity {
 
 
 
-
-
-        // Remove the delete icon if the current User is not the original reviewer or not an Admin
+        // Remove the delete & edit icons if the current User is not the original
+        // reviewer or not an Admin
         deleteIcon.setVisibility(View.GONE);
+        editReviewIcon.setVisibility(View.INVISIBLE);
 
         // Update the thumbsUpIcon and CommentIcon position since we removed the deleteIcon
         ConstraintLayout cl = (ConstraintLayout) findViewById(R.id.constraintSet_individualReview);
@@ -80,8 +80,6 @@ public class IndividualReviewActivity extends AppCompatActivity {
         cs.setHorizontalBias(R.id.thumbsUpIcon, (float) 0.4);
         cs.setHorizontalBias(R.id.commentIcon, (float) 0.6);
         cs.applyTo(cl);
-
-        editReviewIcon.setVisibility(View.INVISIBLE);
 
         int originalReviewerId = extras.getInt("REVIEWER_ID");
         if (MainActivity.globalUser.getUserId() == originalReviewerId ||
@@ -93,7 +91,6 @@ public class IndividualReviewActivity extends AppCompatActivity {
 
             deleteIcon.setVisibility(View.VISIBLE);
             editReviewIcon.setVisibility(View.VISIBLE);
-
         }
 
         editReviewIcon.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +98,17 @@ public class IndividualReviewActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(IndividualReviewActivity.this, EditReviewActivity.class);
                 intent.putExtras(extras);
+                startActivity(intent);
+            }
+        });
+
+        commentIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(IndividualReviewActivity.this, CommentThreadActivity.class);
+                intent.putExtras(extras);
+                intent.putExtra(Const.COMMENT_TYPE, Const.REVIEW_COMMENT);
+                intent.putExtra(Const.ID_FOR_COMMENT, reviewId);
                 startActivity(intent);
             }
         });

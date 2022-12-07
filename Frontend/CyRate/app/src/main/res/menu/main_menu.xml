@@ -14,12 +14,20 @@
             android:id="@+id/nav_addBusiness"
             android:icon="@drawable/add_bussiness_icon"
             android:title="Add Business" />
+        <item
+            android:id="@+id/nav_all_users"
+            android:icon="@drawable/profile_icon"
+            android:title="All Users" />
     </group>
 
 
     <item android:title="Profile">
         <menu>
             <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_favorites"
+                    android:icon="@drawable/star_outline"
+                    android:title="Favorites" />
                 <item
                     android:id="@+id/nav_edit_profile"
                     android:icon="@drawable/profile_icon"

@@ -5,10 +5,13 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,12 +32,14 @@ import com.example.cyrate.Logic.BusinessServiceLogic;
 import com.example.cyrate.Logic.ReviewInterfaces.reviewStringResponse;
 import com.example.cyrate.R;
 import com.example.cyrate.UserType;
+import com.example.cyrate.activities.CommentThreadActivity;
 import com.example.cyrate.activities.IndividualReviewActivity;
 import com.example.cyrate.activities.MainActivity;
 import com.example.cyrate.activities.ReviewListActivity;
 import com.example.cyrate.models.BusinessPostCardModel;
 //import com.example.cyrate.models.RecyclerViewInterface;
 import com.example.cyrate.models.ReviewListCardModel;
+import com.example.cyrate.net_utils.Const;
 
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft;
@@ -42,11 +47,13 @@ import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Comment;
 
 import java.lang.reflect.Array;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -60,6 +67,7 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
     Bundle extras;
 
     /**
+     *
      * @param ctx
      * @param businessPostList
      * @param extras
@@ -68,7 +76,7 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
             Context ctx,
             ArrayList<BusinessPostCardModel> businessPostList,
             Bundle extras
-    ) {
+    ){
         this.ctx = ctx;
         this.businessPostList = businessPostList;
         this.extras = extras;
@@ -78,14 +86,17 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
     @Override
     public BusinessFeedAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(ctx);
-        View view = inflater.inflate(R.layout.business_post_card, parent, false);
+        View view = inflater.inflate(R.layout. business_post_card, parent, false);
         return new BusinessFeedAdapter.MyViewHolder(view, ctx, extras, businessPostList);
     }
 
     @Override
     public void onBindViewHolder(@NonNull BusinessFeedAdapter.MyViewHolder holder, int position) {
+        final byte[] imgBlob = businessPostList.get(position).getBlobPhoto();
+        final Bitmap bitmap = BitmapFactory.decodeByteArray(imgBlob, 0, imgBlob.length);
+        holder.busPostPhoto.setImageBitmap(bitmap);
+
         new ImageLoaderTask(businessPostList.get(position).getBusiness().getPhotoUrl(), holder.busProfilePic).execute();
-        new ImageLoaderTask(businessPostList.get(position).getPhotoUrl(), holder.busPostPhoto).execute();
 
         holder.busName.setText(businessPostList.get(position).getBusiness().getBusName());
         holder.busPostDate.setText(businessPostList.get(position).getDate());
@@ -98,14 +109,14 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
         return businessPostList.size();
     }
 
+
+
     // Class necessary and is similar for having an onCreate method. Allows us to get all our views
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView busProfilePic, busPostPhoto, deleteIcon, editIcon, likeButton;
+        ImageView busProfilePic, busPostPhoto, deleteIcon, editIcon, likeButton, commentIcon;
         TextView busName, busPostDate, busPostText, likeCount;
 
-        WebSocketClient webSocket;
-        String SERVER_PATH = "wss://ws.postman-echo.com/raw/";
 
         public MyViewHolder(@NonNull View itemView, Context ctx, Bundle extras, ArrayList<BusinessPostCardModel> list) {
             super(itemView);
@@ -119,6 +130,8 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
 
             deleteIcon = itemView.findViewById(R.id.busPost_deleteIcon);
             editIcon = itemView.findViewById(R.id.busPost_editIcon);
+            commentIcon = itemView.findViewById(R.id.busPost_comment);
+
             likeButton = itemView.findViewById(R.id.busPost_thumbsUp);
 
             // Remove the delete icon if the current User is not the original reviewer or not an Admin
@@ -145,12 +158,18 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
                 editIcon.setVisibility(View.VISIBLE);
             }
 
-            try {
-                initiateSocketConnection(ctx);
-                webSocket.connect();
-            } catch (URISyntaxException e) {
-                e.printStackTrace();
-            }
+
+
+            commentIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(ctx, CommentThreadActivity.class);
+                    intent.putExtras(extras);
+                    intent.putExtra(Const.ID_FOR_COMMENT, list.get(getAdapterPosition()).getPostId());
+                    intent.putExtra(Const.COMMENT_TYPE, Const.BUSPOST_COMMENT);
+                    ctx.startActivity(intent);
+                }
+            });
 
             editIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -158,30 +177,13 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
                     Intent intent = new Intent(ctx, EditBusinessPostActivity.class);
                     intent.putExtras(extras);
                     intent.putExtra("POST_TEXT", list.get(getAdapterPosition()).getPostTxt());
-                    intent.putExtra("POST_PHOTO", list.get(getAdapterPosition()).getPhotoUrl());
+//                    intent.putExtra("POST_PHOTO", list.get(getAdapterPosition()).getPhotoUrl());
                     intent.putExtra("POST_ID", list.get(getAdapterPosition()).getPostId());
 
                     ctx.startActivity(intent);
                 }
             });
 
-            likeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    final int updatedLikeCount = list.get(getAdapterPosition()).getLikeCount() + 1;
-                    likeCount.setText(String.valueOf(updatedLikeCount));
-                    JSONObject obj = new JSONObject();
-                    try {
-                        obj.put("POST_ID", list.get(getAdapterPosition()).getPostId());
-                        obj.put("LIKE_COUNT", updatedLikeCount);
-                        webSocket.send(obj.toString());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                    likeButton.setColorFilter(Color.parseColor("#C20000"));
-                }
-            });
 
             deleteIcon.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -242,44 +244,8 @@ public class BusinessFeedAdapter extends RecyclerView.Adapter<BusinessFeedAdapte
         }
 
 
-        private void initiateSocketConnection(Context ctx) throws URISyntaxException {
-            Draft[] drafts = {
-                    new Draft_6455()
-            };
 
-
-            Log.d("Socket:", "Trying socket");
-            webSocket = new WebSocketClient(new URI(SERVER_PATH)) {
-                @Override
-                public void onOpen(ServerHandshake handshakedata) {
-                    Log.d("OPEN", "run() returned: " + "is connecting");
-                    ((Activity) ctx).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(ctx, "Socket Connection Successful", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-
-                @Override
-                public void onMessage(String message) {
-                Log.d("Socket:" ,"Message Received " + message);
-                // Do stuff when server is setup
-                }
-
-                @Override
-                public void onClose(int code, String reason, boolean remote) {
-
-                }
-
-                @Override
-                public void onError(Exception ex) {
-
-                }
-            };
-        }
 
     }
-
 
 }

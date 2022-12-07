@@ -12,9 +12,9 @@
         android:layout_height="200dp"
         android:scaleType="fitXY"
         android:src="@drawable/provisions_hero"
+        app:layout_constraintBottom_toTopOf="@id/restaurant_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/restaurant_name"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
@@ -49,15 +49,16 @@
 
     <TextView
         android:id="@+id/restaurant_name"
-        android:layout_width="wrap_content"
+        android:layout_width="341dp"
         android:layout_height="wrap_content"
-        android:text="Restaurant Name"
-        android:textSize="30dp"
-        android:letterSpacing=".15"
+        android:layout_marginStart="16dp"
         android:fontFamily="@font/raleway_medium"
-        android:textFontWeight="700"
+        android:letterSpacing=".15"
+        android:maxWidth="340dp"
+        android:text="Restaurant Name"
         android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textFontWeight="700"
+        android:textSize="30dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/restaurant_image" />
 
@@ -219,12 +220,11 @@
         android:id="@+id/favorite_star"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/view"
-        app:layout_constraintStart_toEndOf="@+id/restaurant_name"
-        app:srcCompat="@drawable/star_outline"
-        android:tooltipText="Add to Favorites"/>
-
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="16dp"
+        android:tooltipText="Add to Favorites"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/restaurant_image"
+        app:srcCompat="@drawable/star_outline" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

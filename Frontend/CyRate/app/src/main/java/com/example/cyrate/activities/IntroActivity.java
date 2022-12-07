@@ -14,7 +14,9 @@ import com.example.cyrate.Logic.UserLogic;
 import com.example.cyrate.Logic.UserInterfaces.getEmailPasswordResponse;
 import com.example.cyrate.Logic.UserInterfaces.getUsernamesResponse;
 import com.example.cyrate.R;
+import com.example.cyrate.models.BusinessListCardModel;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -30,7 +32,7 @@ public class IntroActivity extends AppCompatActivity {
     public static HashSet<String> usernamesSet;
     public static HashSet<String> phoneNumberSet;
 
-
+    public static ArrayList<BusinessListCardModel> globalUserFavorites;
 
     private static final int NUM_PAGES = 2;
 //    private ViewPager viewPager;

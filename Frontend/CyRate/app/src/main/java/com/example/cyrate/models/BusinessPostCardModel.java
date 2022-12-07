@@ -4,28 +4,26 @@ public class BusinessPostCardModel {
     private int postId;
     private String postTxt;
     private String date;
-    private String photoUrl;
     private int likeCount;
     private BusinessListCardModel business;
+    private byte[] blobPhoto;
 
     /**
      *
      * @param postId
      * @param postTxt
      * @param date
-     * @param photoUrl
+     * @param blobPhoto
      * @param business
      */
-    public BusinessPostCardModel(int postId, String postTxt, String date, String photoUrl, BusinessListCardModel business, int likeCount) {
+    public BusinessPostCardModel(int postId, String postTxt, String date, byte[] blobPhoto, BusinessListCardModel business) {
         this.postId = postId;
         this.postTxt = postTxt;
         this.date = date;
-        this.photoUrl = photoUrl;
+        this.blobPhoto = blobPhoto;
         this.business = business;
-        this.likeCount = likeCount;
+        this.likeCount = 0;
     }
-
-
 
     /**
      *
@@ -75,20 +73,13 @@ public class BusinessPostCardModel {
         this.date = date;
     }
 
-    /**
-     *
-     * @return Attached post photo url
-     */
-    public String getPhotoUrl() {
-        return photoUrl;
+
+    public byte[] getBlobPhoto() {
+        return blobPhoto;
     }
 
-    /**
-     *
-     * @param photoUrl
-     */
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
+    public void setBlobPhoto(byte[] blobPhoto) {
+        this.blobPhoto = blobPhoto;
     }
 
     /**

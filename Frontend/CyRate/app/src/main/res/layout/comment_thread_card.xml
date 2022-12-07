@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/restCardListRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_marginLeft="12dp"
+                android:elevation="12dp"
+                app:cardCornerRadius="60dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/commentThread_profilePic"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/profilepic" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/commentThread_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="John Doe"
+                app:layout_constraintStart_toEndOf="@id/cardView"
+                app:layout_constraintTop_toTopOf="@id/cardView"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:textSize="18dp"
+                android:fontFamily="@font/sf_pro_reg"
+                android:textColor="@color/black"
+                android:letterSpacing=".1"
+                />
+
+            <TextView
+                android:id="@+id/commentThread_bodyText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintWidth_percent=".65"
+                android:textSize="16dp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/sf_pro_thin"
+                android:textFontWeight="500"
+                android:text="Hey, this is a great post. Thanks for sharing! Do you have any other recommendations that you could share?"
+                app:layout_constraintStart_toStartOf="@id/commentThread_name"
+                app:layout_constraintTop_toBottomOf="@id/commentThread_name"
+                />
+
+            <View
+                android:id="@+id/threadBar"
+                android:layout_width="3dp"
+                android:layout_height="0dp"
+                app:layout_constraintHeight_percent=".5"
+                android:background="@color/lightGray"
+                app:layout_constraintTop_toBottomOf="@id/cardView"
+                app:layout_constraintStart_toStartOf="@id/cardView"
+                app:layout_constraintEnd_toEndOf="@id/cardView"
+                />
+
+            <TextView
+                android:id="@+id/commentThread_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3 days ago"
+                app:layout_constraintTop_toBottomOf="@id/commentThread_bodyText"
+                app:layout_constraintStart_toStartOf="@id/commentThread_bodyText"
+                android:textSize="14dp"
+                android:fontFamily="@font/sf_pro_reg"
+                android:textColor="@color/gray"
+                android:letterSpacing=".1"
+                />
+
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

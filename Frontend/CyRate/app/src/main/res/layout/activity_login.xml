@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/activity_login"
     tools:context="com.example.cyrate.activities.LoginActivity">
 
     <ImageView
@@ -22,7 +23,7 @@
      />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+        android:id="@+id/activity_login2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@drawable/view_bg"

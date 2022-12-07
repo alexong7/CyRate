@@ -18,8 +18,10 @@ import com.example.cyrate.Logic.UserInterfaces.getAllUsersResponse;
 import com.example.cyrate.Logic.UserInterfaces.getEmailPasswordResponse;
 import com.example.cyrate.Logic.UserInterfaces.getUserByEmailResponse;
 import com.example.cyrate.Logic.UserInterfaces.getUsernamesResponse;
+import com.example.cyrate.Logic.UserInterfaces.userStringResponse;
 import com.example.cyrate.UserType;
 import com.example.cyrate.activities.MainActivity;
+import com.example.cyrate.models.UserListCardModel;
 import com.example.cyrate.models.UserModel;
 import com.example.cyrate.net_utils.Const;
 
@@ -40,16 +42,33 @@ public class UserLogic {
      */
     public static void getAllUsers(getAllUsersResponse r) {
         String url = Const.GET_ALL_USERS_URL;
-        List<UserModel> userModelList = new ArrayList<>();
+        List<UserListCardModel> userModelList = new ArrayList<>();
 
         JsonArrayRequest arrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 try {
                     //create a list of users
-                    JSONObject user = (JSONObject) response.get(0);
-                    UserModel newUser = new UserModel(user.get("email").toString(), user.get("userPass").toString());
-                    userModelList.add(newUser);
+                    for (int i = 0; i < response.length(); i++){
+                        JSONObject user = (JSONObject) response.get(i);
+
+                        String email = user.get("email").toString();
+                        int id = user.getInt("userID");
+                        String typeString = user.get("userType").toString();
+                        String password = user.get("userPass").toString();
+                        String fullName = user.get("realName").toString();
+                        String username = user.get("username").toString();
+                        String phone = user.get("phoneNum").toString();
+                        String dob = user.get("dob").toString();
+                        String photoUrl = user.get("photoUrl").toString();
+
+                        UserType userType = UserType.fromString(typeString);
+
+
+                        UserListCardModel newUser = new UserListCardModel(id, userType, email, password, fullName, username, phone, dob, photoUrl);
+                        userModelList.add(newUser);
+                    }
+
                     r.onSuccess(userModelList);
                 } catch (JSONException e) {
                     r.onError("OOF");
@@ -101,6 +120,12 @@ public class UserLogic {
 
     }
 
+    /**
+     * converts a JSON user object, converts to and returns a UserModel
+     * @param user
+     * @return
+     * @throws JSONException
+     */
     private UserModel convertToUserModel(JSONObject user) throws JSONException {
         UserModel newUserModel = new UserModel(user.get("email").toString(), user.get("userPass").toString());
         newUserModel.setUsername(user.get("username").toString());
@@ -114,6 +139,11 @@ public class UserLogic {
         return newUserModel;
     }
 
+    /**
+     * returns the corresponding UserType enum to go with the string used in DB
+     * @param jsonType user type string from DB
+     * @return
+     */
     private UserType convertUserType(String jsonType){
         switch (jsonType){
             case "guest":
@@ -297,11 +327,11 @@ public class UserLogic {
      * @param r
      * @throws JSONException
      */
-    public void editUser(int id, String username, String email, String password, String name, String dob, String photo, String phoneNum, editProfileResponse r) throws JSONException {
+    public void editUser(int id, String username, String email, String password, String name, String dob, String photo, String phoneNum, String newType, editProfileResponse r) throws JSONException {
         String url = Const.EDIT_USER_URL + String.valueOf(id);
 
         JSONObject userObject = new JSONObject();
-        userObject.put("userType", MainActivity.globalUser.getUserType().toString());
+        userObject.put("userType", newType);
         userObject.put("realName", name);
         userObject.put("username", username);
         userObject.put("userPass", password);
@@ -323,5 +353,23 @@ public class UserLogic {
         });
         AppController.getInstance().addToRequestQueue(request);
 
+    }
+
+    public void deleteUser(userStringResponse r,int userId) throws JSONException {
+        String url = Const.DELETE_USER_URL + String.valueOf(userId);
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE,
+                url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                r.onSuccess("User Deleted");
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                r.onError("error.toString");
+            }
+        }
+        );
+        AppController.getInstance().addToRequestQueue(request);
     }
 }

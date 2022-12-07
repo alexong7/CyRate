@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.cyrate.Logic.BusinessInterfaces.getBusinessesResponse;
+import com.example.cyrate.Logic.FavoritesServiceLogic;
 import com.example.cyrate.Logic.UserLogic;
 import com.example.cyrate.Logic.UserInterfaces.addUserResponse;
 import com.example.cyrate.Logic.UserInterfaces.getUserByEmailResponse;
@@ -25,9 +27,12 @@ import com.example.cyrate.activities.BusinessListActivity;
 import com.example.cyrate.activities.IntroActivity;
 import com.example.cyrate.activities.MainActivity;
 import com.example.cyrate.activities.WelcomeToCyRateActivity;
+import com.example.cyrate.models.BusinessListCardModel;
 import com.example.cyrate.models.UserModel;
 
 import org.json.JSONException;
+
+import java.util.List;
 
 public class SignUpTabFragment extends Fragment {
     public static boolean keepChecking = false;
@@ -37,11 +42,14 @@ public class SignUpTabFragment extends Fragment {
     Spinner userTypeSpinner;
     String selectedUserType = "normal";
 
+    FavoritesServiceLogic favoritesServiceLogic;
 
     float v = 0;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState){
         ViewGroup root = (ViewGroup) inflater.inflate(R.layout.sign_up_fragment, container, false);
+
+        favoritesServiceLogic = new FavoritesServiceLogic();
 
 
         email = root.findViewById(R.id.email);
@@ -179,6 +187,17 @@ public class SignUpTabFragment extends Fragment {
                                                 public void onSuccess(UserModel userModel) {
                                                     //set global user
                                                     MainActivity.globalUser = userModel;
+                                                    favoritesServiceLogic.getFavoritesByUser(MainActivity.globalUser.getUserId(), new getBusinessesResponse() {
+                                                        @Override
+                                                        public void onSuccess(List<BusinessListCardModel> list) {
+                                                            Log.d("favs", "successful");
+                                                        }
+
+                                                        @Override
+                                                        public void onError(String s) {
+                                                            Log.d("favs", "error: " + s);
+                                                        }
+                                                    });
 
                                                     Intent i;
                                                     if (MainActivity.globalUser.getUserType() == UserType.BASIC_USER) {

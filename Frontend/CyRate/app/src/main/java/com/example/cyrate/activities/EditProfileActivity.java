@@ -90,7 +90,7 @@ public class EditProfileActivity extends AppCompatActivity implements Navigation
 
                 //update
                 try{
-                    userLogic.editUser(id, newUsername, newEmail, newPassword, newName, newBirthday, newPhoto, phoneNum, new editProfileResponse() {
+                    userLogic.editUser(id, newUsername, newEmail, newPassword, newName, newBirthday, newPhoto, phoneNum, MainActivity.globalUser.getUserType().toString(), new editProfileResponse() {
                         @Override
                         public void onSuccess(String s) {
                             Toast.makeText(EditProfileActivity.this, s, Toast.LENGTH_LONG);

@@ -13,13 +13,20 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.cyrate.Logic.BusinessInterfaces.getBusinessesResponse;
+import com.example.cyrate.Logic.FavoritesServiceLogic;
 import com.example.cyrate.Logic.UserLogic;
 import com.example.cyrate.Logic.UserInterfaces.getUserByEmailResponse;
 import com.example.cyrate.activities.BusinessListActivity;
 import com.example.cyrate.activities.IntroActivity;
 import com.example.cyrate.activities.MainActivity;
+import com.example.cyrate.models.BusinessListCardModel;
 import com.example.cyrate.models.UserModel;
 import com.example.cyrate.activities.WelcomeToCyRateActivity;
+
+import java.util.HashMap;
+
+import java.util.List;
 
 public class LoginTabFragment extends Fragment {
 
@@ -30,6 +37,7 @@ public class LoginTabFragment extends Fragment {
     String userEmail;
     String userPassword;
 
+    FavoritesServiceLogic favoritesServiceLogic;
     float v = 0;
 
     @Override
@@ -60,13 +68,18 @@ public class LoginTabFragment extends Fragment {
         login.animate().translationX(0).alpha(1).setDuration(800).setStartDelay(700).start();
         continueAsGuest.animate().translationX(0).alpha(1).setDuration(800).setStartDelay(900).start();
 
+        favoritesServiceLogic = new FavoritesServiceLogic();
+
         login.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //get email and password
                 userEmail = email.getText().toString();
                 userPassword = password.getText().toString();
-                //get user by email
+
+                if(IntroActivity.emailPasswordMap == null){
+                    IntroActivity.emailPasswordMap = new HashMap<>();
+                }
 
                 String expectedPassword = IntroActivity.emailPasswordMap.get(userEmail);
 
@@ -105,6 +118,17 @@ public class LoginTabFragment extends Fragment {
             @Override
             public void onSuccess(UserModel userModel) {
                 MainActivity.globalUser = userModel;
+                favoritesServiceLogic.getFavoritesByUser(MainActivity.globalUser.getUserId(), new getBusinessesResponse() {
+                    @Override
+                    public void onSuccess(List<BusinessListCardModel> list) {
+                        Log.d("favs", "successful");
+                    }
+
+                    @Override
+                    public void onError(String s) {
+                        Log.d("favs", "error: " + s);
+                    }
+                });
 
                 Intent i;
                 if (MainActivity.globalUser.getUserType() == UserType.BASIC_USER) {

@@ -17,6 +17,9 @@ public class BusinessListCardModel {
     private int reviewSum;
     private int reviewCount;
 
+    //-------favorites stuff--------//
+    private int fid;
+
     /**
      *
      * @param busId
@@ -47,6 +50,7 @@ public class BusinessListCardModel {
         this.priceGauge = priceGauge;
         this.reviewSum = reviewSum;
         this.reviewCount = reviewCount;
+        this.fid = -1;
     }
 
     /**
@@ -55,6 +59,22 @@ public class BusinessListCardModel {
      */
     public int getBusId() {
         return busId;
+    }
+
+    /**
+     *
+     * @return Favorite ID
+     */
+    public int getFid(){
+        return fid;
+    }
+
+    /**
+     * set favorites id for this business card to fid
+     * @param fid
+     */
+    public void setFid(int fid){
+        this.fid = fid;
     }
 
     /**
@@ -169,82 +189,42 @@ public class BusinessListCardModel {
         return ownerId;
     }
 
-    /**
-     *
-     * @param ownerId
-     */
     public void setOwnerId(int ownerId) {
         this.ownerId = ownerId;
     }
 
-    /**
-     *
-     * @return Business Menu Link
-     */
     public String getMenuLink() {
         return menuLink;
     }
 
-    /**
-     *
-     * @param menuLink
-     */
     public void setMenuLink(String menuLink) {
         this.menuLink = menuLink;
     }
 
-    /**
-     *
-     * @return Business Price Gauge
-     */
     public String getPriceGauge() {
         return priceGauge;
     }
 
-    /**
-     *
-     * @param priceGauge
-     */
     public void setPriceGauge(String priceGauge) {
         this.priceGauge = priceGauge;
     }
 
-    /**
-     *
-     * @return Sum of all Ratings for this Business
-     */
     public int getReviewSum() {
         return reviewSum;
     }
 
-    /**
-     *
-     * @param reviewSum
-     */
     public void setReviewSum(int reviewSum) {
         this.reviewSum = reviewSum;
     }
 
-    /**
-     *
-     * @return Total number of reviews left for this Business
-     */
     public int getReviewCount() {
         return reviewCount;
     }
 
-    /**
-     *
-     * @param reviewCount
-     */
     public void setReviewCount(int reviewCount) {
         this.reviewCount = reviewCount;
     }
 
-    /**
-     *
-     * @return
-     */
     @Override
     public String toString() {
         return "RestaurantListCardModel{" +

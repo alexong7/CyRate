@@ -28,4 +28,11 @@
         <item>Normal</item>
         <item>Business Owner</item>
     </string-array>
+
+    <string name="user_types_dropdown_admin">userTypesDropDown</string>
+    <string-array name="userTypesAdmin">
+        <item>Normal</item>
+        <item>Business Owner</item>
+        <item>Admin</item>
+    </string-array>
 </resources>

@@ -123,7 +123,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/btn_edit_profile"
-            app:layout_constraintStart_toEndOf="@+id/profilePic"
+            app:layout_constraintStart_toEndOf="@+id/profile_pic"
             app:layout_constraintTop_toBottomOf="@+id/header_bottom"
             app:layout_constraintVertical_bias="0.0" />
 
@@ -138,7 +138,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/phone_label"
-            app:layout_constraintStart_toEndOf="@+id/profilePic"
+            app:layout_constraintStart_toEndOf="@+id/profile_pic"
             app:layout_constraintTop_toBottomOf="@+id/header_bottom" />
 
         <ImageView
@@ -166,7 +166,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.452"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/profilePic"
+            app:layout_constraintTop_toBottomOf="@+id/profile_pic"
             app:layout_constraintWidth_percent=".8" />
 
         <TextView
@@ -184,7 +184,7 @@
             app:layout_constraintVertical_bias="0.023" />
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/profilePic"
+            android:id="@+id/profile_pic"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginStart="25dp"
@@ -245,7 +245,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/username_label"
-            app:layout_constraintStart_toEndOf="@+id/profilePic"
+            app:layout_constraintStart_toEndOf="@+id/profile_pic"
             app:layout_constraintTop_toBottomOf="@+id/header_bottom" />
 
         <TextView
@@ -259,7 +259,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/email_label"
-            app:layout_constraintStart_toEndOf="@+id/profilePic"
+            app:layout_constraintStart_toEndOf="@+id/profile_pic"
             app:layout_constraintTop_toBottomOf="@+id/header_bottom" />
 
         <androidx.constraintlayout.widget.Group

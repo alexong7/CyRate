@@ -121,18 +121,31 @@
         app:layout_constraintTop_toBottomOf="@id/textView3"
         />
 
-    <EditText
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/addPost_photoUrl"
-        android:layout_width="380dp"
+        android:layout_width="200dp"
         android:layout_height="50dp"
         android:textSize="14dp"
         android:gravity="center"
         android:layout_marginTop="10dp"
-        android:background="@drawable/edit_text_bg"
-        android:hint="Add a photo!"
+        android:background="@drawable/submit_button_background"
+        android:textColor="@color/white"
+        android:text="Add Photo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/addPost_postTxt"
+        />
+
+    <ImageView
+        android:id="@+id/addPost_photoCheck"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/checkmark_icon"
+        app:tint="@color/green"
+        android:layout_marginLeft="5dp"
+        app:layout_constraintStart_toEndOf="@id/addPost_photoUrl"
+        app:layout_constraintTop_toTopOf="@id/addPost_photoUrl"
+        app:layout_constraintBottom_toBottomOf="@id/addPost_photoUrl"
         />
 
 

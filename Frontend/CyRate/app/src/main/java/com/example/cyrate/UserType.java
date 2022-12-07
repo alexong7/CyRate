@@ -31,6 +31,25 @@ public enum UserType {
         }
         return s;
     }
+
+    /**
+     * returns the UserType from the corresponding String as translated to String from UserType.toString()
+     * @param type
+     * @return
+     */
+    public static UserType fromString(String type){
+        System.out.println(type);
+        switch(type){
+            case "guest":
+                return GUEST;
+            case "owner":
+                return BUSINESS_OWNER;
+            case "admin":
+                return ADMIN;
+            default:
+                return BASIC_USER;
+        }
+    }
 }
 
 
