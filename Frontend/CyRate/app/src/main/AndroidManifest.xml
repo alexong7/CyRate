@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".AppController"
@@ -82,6 +83,9 @@
             android:exported="true" />
         <activity
             android:name=".activities.PersonalReviewListActivity"
+            android:exported="true" />
+        <activity
+            android:name=".activities.FavoritesActivity"
             android:exported="true" />
     </application>
 

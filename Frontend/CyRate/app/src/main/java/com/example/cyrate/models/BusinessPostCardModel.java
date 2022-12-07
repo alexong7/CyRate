@@ -4,27 +4,25 @@ public class BusinessPostCardModel {
     private int postId;
     private String postTxt;
     private String date;
-    private String photoUrl;
+//    private String photoUrl;
     private BusinessListCardModel business;
+    private byte[] blobPhoto;
 
     /**
-     *
      * @param postId
      * @param postTxt
      * @param date
-     * @param photoUrl
      * @param business
      */
-    public BusinessPostCardModel(int postId, String postTxt, String date, String photoUrl, BusinessListCardModel business) {
+    public BusinessPostCardModel(int postId, String postTxt, String date, byte[] blobPhoto, BusinessListCardModel business) {
         this.postId = postId;
         this.postTxt = postTxt;
         this.date = date;
-        this.photoUrl = photoUrl;
+        this.blobPhoto = blobPhoto;
         this.business = business;
     }
 
     /**
-     *
      * @return Post ID
      */
     public int getPostId() {
@@ -32,7 +30,6 @@ public class BusinessPostCardModel {
     }
 
     /**
-     *
      * @param postId
      */
     public void setPostId(int postId) {
@@ -40,7 +37,6 @@ public class BusinessPostCardModel {
     }
 
     /**
-     *
      * @return Post Body Text
      */
     public String getPostTxt() {
@@ -48,7 +44,6 @@ public class BusinessPostCardModel {
     }
 
     /**
-     *
      * @param postTxt
      */
     public void setPostTxt(String postTxt) {
@@ -56,7 +51,6 @@ public class BusinessPostCardModel {
     }
 
     /**
-     *
      * @return Date of Post
      */
     public String getDate() {
@@ -64,31 +58,22 @@ public class BusinessPostCardModel {
     }
 
     /**
-     *
      * @param date
      */
     public void setDate(String date) {
         this.date = date;
     }
 
-    /**
-     *
-     * @return Attached post photo url
-     */
-    public String getPhotoUrl() {
-        return photoUrl;
+
+    public byte[] getBlobPhoto() {
+        return blobPhoto;
+    }
+
+    public void setBlobPhoto(byte[] blobPhoto) {
+        this.blobPhoto = blobPhoto;
     }
 
     /**
-     *
-     * @param photoUrl
-     */
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
-    }
-
-    /**
-     *
      * @return Business that made the post
      */
     public BusinessListCardModel getBusiness() {
@@ -96,7 +81,6 @@ public class BusinessPostCardModel {
     }
 
     /**
-     *
      * @param business
      */
     public void setBusiness(BusinessListCardModel business) {
