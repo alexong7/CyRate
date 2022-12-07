@@ -38,13 +38,13 @@ public class LikeSocket {
     private static UserRepository userRepo;
     private static LikeRepository likeRepo;
     private User user;
-    private int likecount;
 
     @Autowired
     public void setReviewRepository(ReviewRepository repo)
     {
         reviewRepo = repo;
     }
+
     @Autowired
     public void setLikeRepository(LikeRepository repo)
     {
@@ -94,9 +94,6 @@ public class LikeSocket {
     String username = sessionUsernameMap.get(session);
     sessionUsernameMap.remove(session);
     usernameSessionMap.remove(username);
-
-    String message = username + "disconnected";
-    // broadcast(message);
   }
 
 
@@ -109,19 +106,39 @@ public class LikeSocket {
     
     Gson gson = new Gson();
     Like like = gson.fromJson(message, Like.class);
-    if(like.getLikeType().equals("Review"))
+    if(like.getLikeType().equals("review"))
     {
         Review review = reviewRepo.findById(id);
+        Like likes = likeRepo.findByReview(review);
+
+        if(likes == null)
+        {
+            likes = new Like(1);
+        }
+        else
+        {
+            likes.setLikeCount(likes.getLikeCount() + 1);
+        }
+
         like.setReview(review);
+
     } 
     else if(like.getLikeType().equals("businessPost"))
     {
         Post post = postRepo.findById(id);
+        Like likes = likeRepo.findByPost(post);
+
+        if(likes == null)
+        {
+            likes = new Like(1);
+        }
+        else
+        {
+            likes.setLikeCount(likes.getLikeCount() + 1);
+        }
         like.setPost(post);
-
     }
-
-    like.setUser(user);
+    // like.setUser(user);
     likeRepo.save(like);
     broadcast(like);
 
@@ -156,7 +173,7 @@ public class LikeSocket {
     }
     else
     {
-        return new Like();
+        return new Like(0);
     }
   }
 
